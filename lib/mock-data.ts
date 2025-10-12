@@ -1,0 +1,38 @@
+export const mockAgents = [
+  {
+    id: "agt_001",
+    name: "Support Pro",
+    description: "A customer support agent that answers FAQs and escalates complex issues.",
+    image: "/support-agent.jpg",
+    tools: ["Docs", "CRM", "Email"],
+    published: true,
+    error: false,
+  },
+  {
+    id: "agt_002",
+    name: "Research Analyst",
+    description: "Scans the web, summarizes findings, and provides citations.",
+    image: "/research-agent.jpg",
+    tools: ["Web", "Notes", "Citations"],
+    published: false,
+    error: false,
+  },
+  {
+    id: "agt_003",
+    name: "Meeting Summarizer",
+    description: "Joins calls, records, and drafts summary notes with action items.",
+    image: "/meeting-agent.jpg",
+    tools: ["Calendar", "Transcribe", "Docs"],
+    published: true,
+    error: true,
+  },
+  {
+    id: "agt_004",
+    name: "Marketing Copywriter",
+    description: "Creates high-converting landing page copy and A/B test variants.",
+    image: "/marketing-agent.jpg",
+    tools: ["SEO", "A/B", "Analytics", "CMS"],
+    published: false,
+    error: false,
+  },
+]
