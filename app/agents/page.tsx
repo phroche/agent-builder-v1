@@ -57,68 +57,72 @@ export default function MyAgentsPage() {
 
   return (
     <AppShell active="My Agents">
-      <div className="mx-auto max-w-7xl p-4 md:p-6">
-        {/* Prompt Creator */}
-        <PromptCreator onCreate={onCreateAgent} className="mb-6" />
+      <div className="min-h-screen">
+        {/* Header Section - Top 85% of viewport */}
+        <div className="flex min-h-[85vh] flex-col items-center justify-center px-4">
+          <PromptCreator onCreate={onCreateAgent} />
+        </div>
 
-        {/* Agents Section */}
-        <Card>
-          <CardContent className="pt-6">
-            {/* Header: Tabs + Search + Filter */}
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <Tabs
-                value={tab}
-                onValueChange={(v) => setTab(v as "private" | "published")}
-                className="w-full md:w-auto"
-              >
-                <TabsList>
-                  <TabsTrigger value="private">Private Agents</TabsTrigger>
-                  <TabsTrigger value="published">
-                    <div className="flex items-center gap-2">
-                      Published Agents
-                      <Badge variant="secondary">{agents.filter((a) => a.published).length}</Badge>
-                    </div>
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+        {/* Agents Section - Reveals on scroll */}
+        <div className="w-full pb-6">
+          <Card className="w-full">
+            <CardContent className="pt-6">
+              {/* Header: Tabs + Search + Filter */}
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <Tabs
+                  value={tab}
+                  onValueChange={(v) => setTab(v as "private" | "published")}
+                  className="w-full md:w-auto"
+                >
+                  <TabsList>
+                    <TabsTrigger value="private">Private Agents</TabsTrigger>
+                    <TabsTrigger value="published">
+                      <div className="flex items-center gap-2">
+                        Published Agents
+                        <Badge variant="secondary">{agents.filter((a) => a.published).length}</Badge>
+                      </div>
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
 
-              <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
-                <div className="relative md:w-80">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    className="pl-9"
-                    placeholder="Search agents..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    aria-label="Search agents"
-                  />
+                <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
+                  <div className="relative md:w-80">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      className="pl-9"
+                      placeholder="Search agents..."
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      aria-label="Search agents"
+                    />
+                  </div>
+
+                  <Select value={status} onValueChange={(v) => setStatus(v as "all" | "error")}>
+                    <SelectTrigger className="md:w-44" aria-label="Filter by status">
+                      <SelectValue placeholder="Filter by status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All statuses</SelectItem>
+                      <SelectItem value="error">Errors only</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-
-                <Select value={status} onValueChange={(v) => setStatus(v as "all" | "error")}>
-                  <SelectTrigger className="md:w-44" aria-label="Filter by status">
-                    <SelectValue placeholder="Filter by status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All statuses</SelectItem>
-                    <SelectItem value="error">Errors only</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
-            </div>
 
-            {/* Grid of Agents */}
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((agent) => (
-                <AgentCard key={agent.id} agent={agent} onClick={openShare} />
-              ))}
-              {filtered.length === 0 && (
-                <div className="col-span-full rounded-md border p-6 text-center text-sm text-muted-foreground">
-                  No agents found. Try a different search or filter.
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+              {/* Grid of Agents */}
+              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {filtered.map((agent) => (
+                  <AgentCard key={agent.id} agent={agent} onClick={openShare} />
+                ))}
+                {filtered.length === 0 && (
+                  <div className="col-span-full rounded-md border p-6 text-center text-sm text-muted-foreground">
+                    No agents found. Try a different search or filter.
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <ShareAgentModal open={open} onOpenChange={setOpen} agent={selected} />

@@ -2,16 +2,14 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
+import { Paperclip } from "lucide-react"
 
 const ideas = [
-  "Build a support agent for my SaaS",
-  "Create a research analyst agent",
-  "A meeting summarizer that outputs action items",
-  "Marketing copywriter for landing pages",
-  "Sales assistant that drafts follow-ups",
+  "Build support agent",
+  "Research analyst agent", 
+  "Meeting summarizer agent",
 ]
 
 export function PromptCreator({
@@ -31,38 +29,55 @@ export function PromptCreator({
   }
 
   return (
-    <Card className={cn(className)}>
-      <CardHeader>
-        <CardTitle className="text-balance text-lg">What agent do you want to build?</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-col gap-3 md:flex-row">
-          <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Describe the agent you have in mind..."
-            className="flex-1"
-            aria-label="Agent idea"
-          />
-          <Button onClick={submit} className="self-start md:self-auto">
-            Create Agent
+    <div className={cn("w-full max-w-2xl", className)}>
+      {/* Header Text */}
+      <h1 className="mb-8 text-4xl font-bold text-center">What agent do you want to build?</h1>
+      
+      {/* Floating Input Field */}
+      <div className="relative w-full">
+        <Textarea
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Describe the agent you have in mind..."
+          className="min-h-32 resize-none pr-20 pb-12"
+          aria-label="Agent idea"
+        />
+        
+        {/* Attachment Button - Bottom Left */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="absolute bottom-2 left-2 h-8 w-8 p-0"
+          aria-label="Attach file"
+        >
+          <Paperclip className="h-4 w-4" />
+        </Button>
+        
+        {/* Create Agent Button - Bottom Right */}
+        <Button
+          onClick={submit}
+          className="absolute bottom-2 right-2 h-8"
+          size="sm"
+        >
+          Create Agent
+        </Button>
+      </div>
+      
+      {/* Chips - Limited to 3 with max 3 words each */}
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        {ideas.map((idea) => (
+          <Button
+            key={idea}
+            variant="outline"
+            size="sm"
+            onClick={() => applyIdea(idea)}
+            className="rounded-full"
+            aria-label={`Use idea: ${idea}`}
+          >
+            {idea}
           </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {ideas.map((idea) => (
-            <Button
-              key={idea}
-              variant="outline"
-              size="sm"
-              onClick={() => applyIdea(idea)}
-              className="rounded-full"
-              aria-label={`Use idea: ${idea}`}
-            >
-              {idea}
-            </Button>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+        ))}
+      </div>
+    </div>
   )
 }

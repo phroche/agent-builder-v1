@@ -1,6 +1,15 @@
 export const mockAgents = [
   {
     id: "agt_001",
+    name: "Leave Policy Answer Bot",
+    description: "This is a description of the leave policy answer bot which exceeds one line.",
+    image: "/new-agent.jpg",
+    tools: ["Gmail", "Git"],
+    published: true,
+    error: true,
+  },
+  {
+    id: "agt_002",
     name: "Support Pro",
     description: "A customer support agent that answers FAQs and escalates complex issues.",
     image: "/support-agent.jpg",
@@ -9,7 +18,7 @@ export const mockAgents = [
     error: false,
   },
   {
-    id: "agt_002",
+    id: "agt_003",
     name: "Research Analyst",
     description: "Scans the web, summarizes findings, and provides citations.",
     image: "/research-agent.jpg",
@@ -18,7 +27,7 @@ export const mockAgents = [
     error: false,
   },
   {
-    id: "agt_003",
+    id: "agt_004",
     name: "Meeting Summarizer",
     description: "Joins calls, records, and drafts summary notes with action items.",
     image: "/meeting-agent.jpg",
@@ -27,7 +36,7 @@ export const mockAgents = [
     error: true,
   },
   {
-    id: "agt_004",
+    id: "agt_005",
     name: "Marketing Copywriter",
     description: "Creates high-converting landing page copy and A/B test variants.",
     image: "/marketing-agent.jpg",
