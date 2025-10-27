@@ -5,7 +5,7 @@ import { AppShell } from "@/components/app-shell"
 import { PromptCreator } from "@/components/prompt-creator"
 import { type Agent, AgentCard } from "@/components/agent-card"
 import { ShareAgentModal } from "@/components/share-agent-modal"
-import { mockAgents } from "@/lib/mock-data"
+import { useAgents } from "@/hooks/use-agents"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search } from "lucide-react"
 
 export default function MyAgentsPage() {
-  const [agents, setAgents] = useState<Agent[]>(mockAgents)
+  const { agents, loading, error, addAgent } = useAgents()
   const [selected, setSelected] = useState<Agent | null>(null)
   const [open, setOpen] = useState(false)
 
@@ -36,18 +36,19 @@ export default function MyAgentsPage() {
     })
   }, [agents, tab, query, status])
 
-  const onCreateAgent = (prompt: string) => {
-    const id = `agt_${(agents.length + 1).toString().padStart(3, "0")}`
-    const newAgent: Agent = {
-      id,
-      name: prompt.slice(0, 32) || "New Agent",
-      description: prompt,
-      image: "/new-agent.jpg",
-      tools: ["Web", "Docs"],
-      published: false,
-      error: false,
+  const onCreateAgent = async (prompt: string) => {
+    try {
+      await addAgent({
+        name: prompt.slice(0, 32) || "New Agent",
+        description: prompt,
+        image: "/new-agent.jpg",
+        tools: ["Web", "Docs"],
+        published: false,
+        error: false,
+      })
+    } catch (err) {
+      console.error("Failed to create agent:", err)
     }
-    setAgents((prev) => [newAgent, ...prev])
   }
 
   const openShare = (agent: Agent) => {
@@ -64,9 +65,9 @@ export default function MyAgentsPage() {
         </div>
 
         {/* Agents Section - Reveals on scroll */}
-        <div className="w-full pb-6">
+        <div className="w-full pb-6 flex justify-center">
           <Card className="w-full">
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 px-[50px] pb-[50px]">
               {/* Header: Tabs + Search + Filter */}
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <Tabs
@@ -75,7 +76,7 @@ export default function MyAgentsPage() {
                   className="w-full md:w-auto"
                 >
                   <TabsList>
-                    <TabsTrigger value="private">Private Agents</TabsTrigger>
+                    <TabsTrigger value="private">My Agents</TabsTrigger>
                     <TabsTrigger value="published">
                       <div className="flex items-center gap-2">
                         Published Agents
@@ -110,16 +111,26 @@ export default function MyAgentsPage() {
               </div>
 
               {/* Grid of Agents */}
-              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {filtered.map((agent) => (
-                  <AgentCard key={agent.id} agent={agent} onClick={openShare} />
-                ))}
-                {filtered.length === 0 && (
-                  <div className="col-span-full rounded-md border p-6 text-center text-sm text-muted-foreground">
-                    No agents found. Try a different search or filter.
-                  </div>
-                )}
-              </div>
+              {loading ? (
+                <div className="mt-6 text-center text-sm text-muted-foreground">
+                  Loading agents...
+                </div>
+              ) : error ? (
+                <div className="mt-6 text-center text-sm text-red-600">
+                  Error loading agents: {error.message}
+                </div>
+              ) : (
+                <div className="mt-6 grid gap-4 auto-rows-fr" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
+                  {filtered.map((agent) => (
+                    <AgentCard key={agent.id} agent={agent} onClick={openShare} />
+                  ))}
+                  {filtered.length === 0 && (
+                    <div className="col-span-full rounded-md border p-6 text-center text-sm text-muted-foreground">
+                      No agents found. Try a different search or filter.
+                    </div>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
