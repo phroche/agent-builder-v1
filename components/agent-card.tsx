@@ -3,8 +3,9 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Mail, Github, Slack, Building2, AlertCircle, Plus } from "lucide-react"
+import { Mail, Github, Slack, Building2, AlertCircle, Plus, Pencil, Eye } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
 export type Agent = {
@@ -51,10 +52,14 @@ const getToolConfig = (tool: string) => {
 export function AgentCard({
   agent,
   onClick,
+  onEdit,
+  onPreview,
   className,
 }: {
   agent: Agent
   onClick?: (agent: Agent) => void
+  onEdit?: (agent: Agent) => void
+  onPreview?: (agent: Agent) => void
   className?: string
 }) {
   const [maxVisibleTags, setMaxVisibleTags] = useState(3)
@@ -92,15 +97,17 @@ export function AgentCard({
 
   const visibleTools = agent.tools.slice(0, maxVisibleTags)
   const remainingCount = agent.tools.length - maxVisibleTags
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <button
-      onClick={() => onClick?.(agent)}
+    <div
       className={cn(
-        "text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg w-full",
+        "text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg w-full relative group",
         className,
       )}
-      aria-label={`Open share for ${agent.name}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      aria-label={`Agent card for ${agent.name}`}
     >
       <Card ref={cardRef} className="h-full bg-white border-gray-100 shadow-sm w-full">
         <CardContent className="px-4 py-0">
@@ -170,6 +177,43 @@ export function AgentCard({
           </div>
         </CardContent>
       </Card>
-    </button>
+
+      {/* Hover Overlay */}
+      {isHovered && (
+        <div
+          className="absolute inset-0 rounded-lg pointer-events-none"
+          style={{
+            background: 'linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 30%, rgba(255, 255, 255, 0) 70%)'
+          }}
+        >
+          <div className="absolute bottom-0 left-0 right-0 p-4 flex gap-3 pointer-events-auto">
+            <Button
+              variant="default"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit?.(agent)
+              }}
+              className="gap-2 bg-black hover:bg-gray-800 text-white flex-1"
+            >
+              <Pencil className="h-4 w-4" />
+              Edit
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onPreview?.(agent)
+              }}
+              className="gap-2 bg-white hover:bg-gray-50 flex-1"
+            >
+              <Eye className="h-4 w-4" />
+              Preview
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
