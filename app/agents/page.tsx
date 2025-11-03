@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
 import { AppShell } from "@/components/app-shell"
 import { PromptCreator } from "@/components/prompt-creator"
 import { type Agent, AgentCard } from "@/components/agent-card"
@@ -14,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search } from "lucide-react"
 
 export default function MyAgentsPage() {
+  const router = useRouter()
   const { agents, loading, error, addAgent } = useAgents()
   const [selected, setSelected] = useState<Agent | null>(null)
   const [open, setOpen] = useState(false)
@@ -51,7 +53,11 @@ export default function MyAgentsPage() {
     }
   }
 
-  const openShare = (agent: Agent) => {
+  const handleEdit = (agent: Agent) => {
+    router.push(`/agents/${agent.id}/build`)
+  }
+
+  const handlePreview = (agent: Agent) => {
     setSelected(agent)
     setOpen(true)
   }
@@ -122,7 +128,12 @@ export default function MyAgentsPage() {
               ) : (
                 <div className="mt-6 grid gap-4 auto-rows-fr" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
                   {filtered.map((agent) => (
-                    <AgentCard key={agent.id} agent={agent} onClick={openShare} />
+                    <AgentCard
+                      key={agent.id}
+                      agent={agent}
+                      onEdit={handleEdit}
+                      onPreview={handlePreview}
+                    />
                   ))}
                   {filtered.length === 0 && (
                     <div className="col-span-full rounded-md border p-6 text-center text-sm text-muted-foreground">
