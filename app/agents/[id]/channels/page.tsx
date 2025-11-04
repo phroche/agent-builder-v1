@@ -12,7 +12,6 @@ import {
   Store,
   Globe,
   Slack,
-  Send,
   Mail,
   Share2,
   MessageCircle,
@@ -20,7 +19,9 @@ import {
   MessageSquareText,
   Puzzle,
   Workflow,
+  ArrowUpRight,
 } from "lucide-react"
+import { TelegramIcon, WhatsAppIcon, MCPIcon } from "@/components/custom-icons"
 
 type ChannelWithUrl = Channel & {
   shareableUrl?: string
@@ -31,7 +32,7 @@ const channels: ChannelWithUrl[] = [
   {
     id: "whatsapp",
     name: "WhatsApp",
-    icon: MessageCircle,
+    icon: WhatsAppIcon,
     configured: true,
     connectionDetails: "+1 (555) 123-4567 +2",
     phoneNumber: "+1 (555) 123-4567"
@@ -79,13 +80,13 @@ const channels: ChannelWithUrl[] = [
   {
     id: "mcp",
     name: "MCP",
-    icon: Workflow,
+    icon: MCPIcon,
     configured: false
   },
   {
     id: "telegram",
     name: "Telegram",
-    icon: Send,
+    icon: TelegramIcon,
     configured: true,
     connectionDetails: "@myagent_bot",
     shareableUrl: "https://t.me/myagent_bot"
@@ -139,52 +140,86 @@ export default function ChannelsPage() {
 
       {/* Link Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Video className="h-5 w-5" />
-              Meet Link
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex gap-2">
-              <Input
-                value={meetLink}
-                readOnly
-                className="font-mono text-sm"
-              />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => copyToClipboard(meetLink)}
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
+        <Card className="bg-white border-gray-100 shadow-sm py-4 flex flex-col">
+          <CardContent className="px-4 py-0 flex-1 flex flex-col">
+            <div className="space-y-2 flex-1 flex flex-col">
+              {/* Icon */}
+              <div className="flex items-start justify-between">
+                <div className="flex-shrink-0">
+                  <Video className="h-5 w-5 text-gray-700" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <div className="mt-1 flex-1">
+                <h3 className="text-lg font-medium text-gray-900 leading-tight">
+                  Meet Link
+                </h3>
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-auto">
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1 justify-between"
+                    size="sm"
+                    onClick={() => window.open(meetLink, '_blank')}
+                  >
+                    <span>Talk to your agent</span>
+                    <ArrowUpRight className="h-4 w-4 ml-2" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => copyToClipboard(meetLink)}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5" />
-              Chat Link
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex gap-2">
-              <Input
-                value={chatLink}
-                readOnly
-                className="font-mono text-sm"
-              />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => copyToClipboard(chatLink)}
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
+        <Card className="bg-white border-gray-100 shadow-sm py-4 flex flex-col">
+          <CardContent className="px-4 py-0 flex-1 flex flex-col">
+            <div className="space-y-2 flex-1 flex flex-col">
+              {/* Icon */}
+              <div className="flex items-start justify-between">
+                <div className="flex-shrink-0">
+                  <MessageSquare className="h-5 w-5 text-gray-700" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <div className="mt-1 flex-1">
+                <h3 className="text-lg font-medium text-gray-900 leading-tight">
+                  Chat Link
+                </h3>
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-auto">
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1 justify-between"
+                    size="sm"
+                    onClick={() => window.open(chatLink, '_blank')}
+                  >
+                    <span>Chat with your agent</span>
+                    <ArrowUpRight className="h-4 w-4 ml-2" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => copyToClipboard(chatLink)}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
