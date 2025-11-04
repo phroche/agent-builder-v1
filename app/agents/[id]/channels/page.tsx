@@ -122,18 +122,12 @@ export default function ChannelsPage() {
   const meetLink = `https://example.com/agents/${agentId}/meet`
   const chatLink = `https://example.com/agents/${agentId}/chat`
 
-  const configuredChannels = channels.filter(c => c.configured)
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
   }
 
   const handleChannelClick = (channel: Channel) => {
     router.push(`/agents/${agentId}/channels/${channel.id}`)
-  }
-
-  const handleOpenExternal = (channel: Channel) => {
-    window.open(`/agents/${agentId}/channels/${channel.id}`, '_blank')
   }
 
   return (
@@ -196,42 +190,6 @@ export default function ChannelsPage() {
         </Card>
       </div>
 
-      {/* Configured Channels Detail Cards */}
-      {configuredChannels.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {configuredChannels.map((channel) => {
-            const Icon = channel.icon
-            return (
-              <Card key={channel.id}>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Icon className="h-5 w-5" />
-                    {channel.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex gap-2">
-                    <Input
-                      value={channel.shareableUrl || channel.phoneNumber || "Not configured"}
-                      readOnly
-                      className="font-mono text-sm"
-                    />
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => copyToClipboard(channel.shareableUrl || channel.phoneNumber || "")}
-                      disabled={!channel.shareableUrl && !channel.phoneNumber}
-                    >
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
-      )}
-
       {/* Distribution Channels Section */}
       <div className="space-y-6">
         <div>
@@ -244,7 +202,6 @@ export default function ChannelsPage() {
               key={channel.id}
               channel={channel}
               onClick={handleChannelClick}
-              onOpenExternal={handleOpenExternal}
             />
           ))}
         </div>
