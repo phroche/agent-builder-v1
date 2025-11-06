@@ -21,10 +21,18 @@ export function useAgents() {
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (fetchError) throw fetchError
+      if (fetchError) {
+        console.error('Supabase error fetching agents:', {
+          message: fetchError.message,
+          details: fetchError.details,
+          hint: fetchError.hint,
+          code: fetchError.code,
+        })
+        throw new Error(`Failed to fetch agents: ${fetchError.message}`)
+      }
 
       // Transform Supabase data to match Agent type
-      const transformedAgents: Agent[] = (data || []).map((item) => ({
+      const transformedAgents: Agent[] = (data || []).map((item: any) => ({
         id: item.id,
         name: item.name,
         description: item.description,
@@ -36,8 +44,10 @@ export function useAgents() {
 
       setAgents(transformedAgents)
     } catch (err) {
-      console.error('Error fetching agents:', err)
-      setError(err as Error)
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+      const errorDetails = err instanceof Error ? err : JSON.stringify(err)
+      console.error('Error fetching agents:', errorMessage, errorDetails)
+      setError(err instanceof Error ? err : new Error(errorMessage))
     } finally {
       setLoading(false)
     }
@@ -60,14 +70,23 @@ export function useAgents() {
         .select()
         .single()
 
-      if (insertError) throw insertError
+      if (insertError) {
+        console.error('Supabase error adding agent:', {
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          code: insertError.code,
+        })
+        throw new Error(`Failed to add agent: ${insertError.message}`)
+      }
 
       // Refresh the agents list
       await fetchAgents()
 
       return data
     } catch (err) {
-      console.error('Error adding agent:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+      console.error('Error adding agent:', errorMessage, err)
       throw err
     }
   }
@@ -81,14 +100,23 @@ export function useAgents() {
         .select()
         .single()
 
-      if (updateError) throw updateError
+      if (updateError) {
+        console.error('Supabase error updating agent:', {
+          message: updateError.message,
+          details: updateError.details,
+          hint: updateError.hint,
+          code: updateError.code,
+        })
+        throw new Error(`Failed to update agent: ${updateError.message}`)
+      }
 
       // Refresh the agents list
       await fetchAgents()
 
       return data
     } catch (err) {
-      console.error('Error updating agent:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+      console.error('Error updating agent:', errorMessage, err)
       throw err
     }
   }
@@ -100,12 +128,21 @@ export function useAgents() {
         .delete()
         .eq('id', id)
 
-      if (deleteError) throw deleteError
+      if (deleteError) {
+        console.error('Supabase error deleting agent:', {
+          message: deleteError.message,
+          details: deleteError.details,
+          hint: deleteError.hint,
+          code: deleteError.code,
+        })
+        throw new Error(`Failed to delete agent: ${deleteError.message}`)
+      }
 
       // Refresh the agents list
       await fetchAgents()
     } catch (err) {
-      console.error('Error deleting agent:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+      console.error('Error deleting agent:', errorMessage, err)
       throw err
     }
   }

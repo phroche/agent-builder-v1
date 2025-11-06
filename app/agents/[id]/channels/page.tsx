@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { type Channel, ChannelCard } from "@/components/channel-card"
 import {
-  Copy,
+  Clipboard,
   MessageSquare,
   Video,
   Store,
@@ -37,14 +37,14 @@ const channels: ChannelWithUrl[] = [
     connectionDetails: "+1 (555) 123-4567 +2",
     phoneNumber: "+1 (555) 123-4567"
   },
-  {
-    id: "marketplace",
-    name: "Marketplace",
-    icon: Store,
-    configured: true,
-    connectionDetails: "Published to Claude Marketplace, OpenAI Store",
-    shareableUrl: "https://marketplace.example.com/agent/123"
-  },
+  // {
+  //   id: "marketplace",
+  //   name: "Marketplace",
+  //   icon: Store,
+  //   configured: true,
+  //   connectionDetails: "Published to Claude Marketplace, OpenAI Store",
+  //   shareableUrl: "https://marketplace.example.com/agent/123"
+  // },
   {
     id: "api",
     name: "API Access",
@@ -60,14 +60,6 @@ const channels: ChannelWithUrl[] = [
     configured: true,
     connectionDetails: "Support Chat Widget is active",
     shareableUrl: "https://example.com/chat-widget/123"
-  },
-  {
-    id: "website",
-    name: "Website",
-    icon: Globe,
-    configured: true,
-    connectionDetails: "Live at example.com",
-    shareableUrl: "https://example.com"
   },
   {
     id: "slack",
@@ -99,20 +91,20 @@ const channels: ChannelWithUrl[] = [
     connectionDetails: "Install from Chrome Web Store",
     shareableUrl: "https://chrome.google.com/webstore/detail/123"
   },
-  {
-    id: "email",
-    name: "Email",
-    icon: Mail,
-    configured: true,
-    connectionDetails: "agent@example.com",
-    shareableUrl: "mailto:agent@example.com"
-  },
-  {
-    id: "federation",
-    name: "Federation",
-    icon: Share2,
-    configured: false
-  },
+  // {
+  //   id: "email",
+  //   name: "Email",
+  //   icon: Mail,
+  //   configured: true,
+  //   connectionDetails: "agent@example.com",
+  //   shareableUrl: "mailto:agent@example.com"
+  // },
+  // {
+  //   id: "federation",
+  //   name: "Federation",
+  //   icon: Share2,
+  //   configured: false
+  // },
 ]
 
 export default function ChannelsPage() {
@@ -135,7 +127,7 @@ export default function ChannelsPage() {
     <div className="min-h-screen bg-background">
       <div className="p-8 max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Shareability Channels</h1>
+          <h1 className="text-3xl font-bold">Gateways</h1>
         </div>
 
       {/* Link Cards Section */}
@@ -174,7 +166,8 @@ export default function ChannelsPage() {
                     size="sm"
                     onClick={() => copyToClipboard(meetLink)}
                   >
-                    <Copy className="h-4 w-4" />
+                    <Clipboard className="h-4 w-4 mr-2" />
+                    Share link
                   </Button>
                 </div>
               </div>
@@ -216,7 +209,8 @@ export default function ChannelsPage() {
                     size="sm"
                     onClick={() => copyToClipboard(chatLink)}
                   >
-                    <Copy className="h-4 w-4" />
+                    <Clipboard className="h-4 w-4 mr-2" />
+                    Share link
                   </Button>
                 </div>
               </div>

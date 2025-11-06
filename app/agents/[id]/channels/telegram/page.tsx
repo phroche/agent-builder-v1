@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { ArrowLeft, Copy } from "lucide-react"
+import { ArrowLeft, Clipboard } from "lucide-react"
 import { TelegramIcon } from "@/components/custom-icons"
 
 // Mock data for connected Telegram bots
@@ -23,12 +23,14 @@ const initialConnections = [
     id: "1",
     botName: "My Agent Bot",
     botUsername: "@myagentbot",
+    phoneNumber: "+1 (555) 123-4567",
     webhookUrl: "https://api.example.com/webhook/telegram/1"
   },
   {
     id: "2",
     botName: "Support Bot",
     botUsername: "@supportbot",
+    phoneNumber: "+1 (555) 987-6543",
     webhookUrl: "https://api.example.com/webhook/telegram/2"
   },
 ]
@@ -40,8 +42,11 @@ export default function TelegramConfigPage() {
 
   const [connections, setConnections] = useState(initialConnections)
   const [currentPage, setCurrentPage] = useState(1)
+  const [apiKeyName, setApiKeyName] = useState("")
   const [botToken, setBotToken] = useState("")
-  const [botName, setBotName] = useState("")
+  const [botUsername, setBotUsername] = useState("")
+  const [apiKey, setApiKey] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
   const [webhookUrl, setWebhookUrl] = useState("")
 
   const itemsPerPage = 7
@@ -62,8 +67,9 @@ export default function TelegramConfigPage() {
     // Create new connection
     const newConnection = {
       id: String(connections.length + 1),
-      botName: botName,
-      botUsername: `@${botName.toLowerCase().replace(/\s+/g, '')}`,
+      botName: apiKeyName,
+      botUsername: botUsername,
+      phoneNumber: phoneNumber,
       webhookUrl: generatedWebhookUrl
     }
 
@@ -71,8 +77,17 @@ export default function TelegramConfigPage() {
     setConnections([...connections, newConnection])
 
     // Clear form fields
+    setApiKeyName("")
     setBotToken("")
-    setBotName("")
+    setBotUsername("")
+    setApiKey("")
+    setPhoneNumber("")
+  }
+
+  const handleCreateApiKey = () => {
+    // Generate a new API key
+    const newApiKey = `sk_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`
+    setApiKey(newApiKey)
   }
 
   return (
@@ -84,7 +99,7 @@ export default function TelegramConfigPage() {
         className="gap-2 mb-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Channels
+        Back to Gateways
       </Button>
 
       <div className="mb-6">
@@ -101,14 +116,14 @@ export default function TelegramConfigPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/50 hover:bg-muted/50">
-                    <TableHead className="w-[70%] pl-6 h-12">Bot Username</TableHead>
+                    <TableHead className="w-[70%] pl-6 h-12">Phone Number</TableHead>
                     <TableHead className="w-[30%] h-12">Webhook URL</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {currentConnections.map((connection) => (
                     <TableRow key={connection.id}>
-                      <TableCell className="pl-6">{connection.botUsername}</TableCell>
+                      <TableCell className="pl-6">{connection.phoneNumber}</TableCell>
                       <TableCell>
                         <Button
                           variant="outline"
@@ -116,7 +131,7 @@ export default function TelegramConfigPage() {
                           onClick={() => copyToClipboard(connection.webhookUrl)}
                           className="gap-2 rounded-xl"
                         >
-                          <Copy className="h-4 w-4" />
+                          <Clipboard className="h-4 w-4" />
                           Copy
                         </Button>
                       </TableCell>
@@ -187,7 +202,27 @@ export default function TelegramConfigPage() {
             <CardContent>
               <div className="space-y-8">
                   <div className="space-y-2">
-                    <Label htmlFor="botToken">Bot Token</Label>
+                    <Label htmlFor="apiKeyName">Name your API key</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="apiKeyName"
+                        value={apiKeyName}
+                        onChange={(e) => setApiKeyName(e.target.value)}
+                        placeholder="Enter API key name"
+                        className="rounded-xl flex-1"
+                      />
+                      <Button
+                        onClick={handleCreateApiKey}
+                        variant="outline"
+                        className="rounded-xl whitespace-nowrap"
+                      >
+                        Create API key
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="botToken">Telegram Bot Token</Label>
                     <Input
                       id="botToken"
                       type="password"
@@ -199,12 +234,35 @@ export default function TelegramConfigPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="botName">Bot Name</Label>
+                    <Label htmlFor="botUsername">Telegram Bot Username</Label>
                     <Input
-                      id="botName"
-                      value={botName}
-                      onChange={(e) => setBotName(e.target.value)}
-                      placeholder="Enter bot name"
+                      id="botUsername"
+                      value={botUsername}
+                      onChange={(e) => setBotUsername(e.target.value)}
+                      placeholder="@yourbotusername"
+                      className="rounded-xl"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="apiKey">API Key</Label>
+                    <Input
+                      id="apiKey"
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                      placeholder="Your API key will appear here"
+                      className="rounded-xl"
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                    <Input
+                      id="phoneNumber"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="+1 (555) 000-0000"
                       className="rounded-xl"
                     />
                   </div>
@@ -228,7 +286,7 @@ export default function TelegramConfigPage() {
                       onClick={() => copyToClipboard(webhookUrl)}
                       className="rounded-xl"
                     >
-                      <Copy className="h-4 w-4 mr-2" />
+                      <Clipboard className="h-4 w-4 mr-2" />
                       Copy
                     </Button>
                   </div>

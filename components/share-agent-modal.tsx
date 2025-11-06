@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Agent } from "./agent-card"
 import Image from "next/image"
-import { Copy } from "lucide-react"
+import { Clipboard } from "lucide-react"
 
 export function ShareAgentModal({
   open,
@@ -31,7 +31,7 @@ export function ShareAgentModal({
       className="gap-2"
       aria-label="Copy"
     >
-      <Copy className="size-4" />
+      <Clipboard className="size-4" />
       Copy
     </Button>
   )

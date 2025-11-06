@@ -22,7 +22,7 @@ const sidebarLinks = [
     icon: Wand2,
   },
   {
-    name: "Shareability Channels",
+    name: "Gateways",
     href: "/agents/[id]/channels",
     icon: Radio,
   },

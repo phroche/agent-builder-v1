@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ArrowLeft, Copy, MessageSquareText } from "lucide-react"
+import { ArrowLeft, Clipboard, MessageSquareText } from "lucide-react"
 
 export default function ChatWidgetConfigPage() {
   const params = useParams()
@@ -58,7 +58,7 @@ export default function ChatWidgetConfigPage() {
         className="gap-2 mb-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Channels
+        Back to Gateways
       </Button>
 
       <div className="mb-6">
@@ -87,21 +87,51 @@ export default function ChatWidgetConfigPage() {
 
               {allowOthersToRun && (
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label>Chat Bubble Script</Label>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => copyToClipboard(chatBubbleScript)}
-                      className="rounded-xl"
-                    >
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy
-                    </Button>
+                  <Label>Chat Bubble Script</Label>
+                  <div className="relative">
+                    <div className="absolute top-3 right-3 z-10">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => copyToClipboard(chatBubbleScript)}
+                        className="gap-2 rounded-lg shadow-sm"
+                      >
+                        <Clipboard className="h-4 w-4" />
+                        Copy
+                      </Button>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
+                      <div className="p-4 overflow-x-auto text-sm font-mono text-gray-800">
+                        <div className="table w-full">
+                          {chatBubbleScript.split('\n').map((line, index) => {
+                            // Escape HTML for display
+                            const displayLine = line
+                              .replace(/</g, '&lt;')
+                              .replace(/>/g, '&gt;')
+
+                            // Apply syntax highlighting
+                            const syntaxHighlighted = displayLine
+                              .replace(/(&lt;script|&lt;\/script&gt;|script&gt;)/g, '<span class="text-purple-600 font-semibold">$1</span>')
+                              .replace(/(src|agentId|apiKey)=/g, '<span class="text-blue-600">$1</span>=')
+                              .replace(/(["'])(.*?)\1/g, '<span class="text-green-700">$1$2$1</span>')
+                              .replace(/\b(ChatWidget|init)\b/g, '<span class="text-blue-600">$1</span>')
+
+                            return (
+                              <div key={index} className="table-row">
+                                <span className="table-cell text-gray-400 select-none pr-4 text-right" style={{ width: '3rem' }}>
+                                  {index + 1}
+                                </span>
+                                <span
+                                  className="table-cell"
+                                  dangerouslySetInnerHTML={{ __html: syntaxHighlighted || ' ' }}
+                                />
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto text-sm border">
-                    <code>{chatBubbleScript}</code>
-                  </pre>
                 </div>
               )}
             </CardContent>

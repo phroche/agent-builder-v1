@@ -73,7 +73,7 @@ export default function ChannelConfigPage() {
         className="gap-2 mb-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Channels
+        Back to Gateways
       </Button>
 
       <div className="mb-6">
