@@ -225,13 +225,19 @@ export default function ChannelsPage() {
           <h2 className="text-2xl font-semibold">Make your agent accessible across different platforms</h2>
         </div>
 
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {channels.map((channel) => (
+            <div key={channel.id} className="relative group">
             <ChannelCard
               key={channel.id}
               channel={channel}
               onClick={handleChannelClick}
+              className="transition-all duration-200 hover:shadow-sm hover:scale-[1.02]"
             />
+                <ArrowUpRight className="absolute top-3 right-3 h-5 w-5 text-gray-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
+
+            </div>
           ))}
         </div>
         </div>
