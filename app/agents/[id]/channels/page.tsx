@@ -91,14 +91,14 @@ const channels: ChannelWithUrl[] = [
     connectionDetails: "Install from Chrome Web Store",
     shareableUrl: "https://chrome.google.com/webstore/detail/123"
   },
-  // {
-  //   id: "email",
-  //   name: "Email",
-  //   icon: Mail,
-  //   configured: true,
-  //   connectionDetails: "agent@example.com",
-  //   shareableUrl: "mailto:agent@example.com"
-  // },
+  {
+    id: "email",
+    name: "Email",
+    icon: Mail,
+    configured: true,
+    connectionDetails: "agent@example.com",
+    shareableUrl: "mailto:agent@example.com"
+  },
   // {
   //   id: "federation",
   //   name: "Federation",
